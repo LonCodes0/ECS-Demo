@@ -19,7 +19,7 @@ export function WeightsChart({ data }: { data: VariableMetric[] }) {
                 dataKey="weight"
                 nameKey="name"
                 innerRadius={58}
-                outerRadius={96}
+                outerRadius={86}
                 paddingAngle={4}
               >
                 {data.map((entry, index: number) => (
