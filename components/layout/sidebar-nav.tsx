@@ -99,7 +99,7 @@ export function SidebarNav() {
             AA
           </div>
           <div>
-            <div className="text-sm font-medium text-white">Amina Alharbi</div>
+            <div className="text-sm font-medium text-white">Abdullah Alsumairi</div>
             <div className="text-xs text-emerald-50/52">Lead Demonstrator</div>
           </div>
         </div>
