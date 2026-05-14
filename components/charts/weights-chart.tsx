@@ -9,18 +9,18 @@ const colors = ["#42b96f", "#2f91d4", "#f39c39", "#7b60d1", "#3abf9d"];
 
 export function WeightsChart({ data }: { data: VariableMetric[] }) {
   return (
-    <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr]">
-      <div className="h-[220px]">
-        <ChartShell height={220}>
+    <div className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr] xl:items-center">
+      <div className="mx-auto h-[250px] w-full max-w-[250px]">
+        <ChartShell height={250}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 dataKey="weight"
                 nameKey="name"
-                innerRadius={52}
-                outerRadius={86}
-                paddingAngle={3}
+                innerRadius={58}
+                outerRadius={96}
+                paddingAngle={4}
               >
                 {data.map((entry, index: number) => (
                   <Cell key={entry.id} fill={colors[index % colors.length]} />
@@ -37,17 +37,20 @@ export function WeightsChart({ data }: { data: VariableMetric[] }) {
           </ResponsiveContainer>
         </ChartShell>
       </div>
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {data.map((item, index: number) => (
-          <div key={item.id} className="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-2">
-            <div className="flex items-center gap-3 text-sm text-slate-700">
+          <div
+            key={item.id}
+            className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 px-3 py-3"
+          >
+            <div className="flex min-w-0 items-center gap-3 text-sm text-slate-700">
               <span
-                className="h-2.5 w-2.5 rounded-full"
+                className="h-2.5 w-2.5 shrink-0 rounded-full"
                 style={{ backgroundColor: colors[index % colors.length] }}
               />
-              <span>{item.name}</span>
+              <span className="leading-5 text-slate-700">{item.name}</span>
             </div>
-            <span className="font-medium text-slate-900">{item.weight}%</span>
+            <span className="shrink-0 font-medium text-slate-900">{item.weight}%</span>
           </div>
         ))}
       </div>
