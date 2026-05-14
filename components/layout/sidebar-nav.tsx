@@ -35,18 +35,18 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <aside className="glass-panel hidden w-[280px] shrink-0 rounded-[2rem] border border-white/35 bg-[linear-gradient(180deg,#06150f_0%,#0b1f17_55%,#11281f_100%)] p-5 text-white shadow-[0_24px_55px_-28px_rgba(4,14,10,0.7)] lg:flex lg:min-h-[calc(100dvh-2.5rem)] lg:flex-col">
-      <div className="flex items-center gap-3 border-b border-white/10 pb-5">
+    <aside className="hidden w-[280px] shrink-0 rounded-[2rem] border border-emerald-950/10 bg-[linear-gradient(180deg,#06150f_0%,#0b1f17_52%,#11281f_100%)] p-5 text-white shadow-[0_24px_55px_-28px_rgba(4,14,10,0.72)] lg:flex lg:min-h-[calc(100dvh-2.5rem)] lg:flex-col">
+      <div className="flex items-center gap-3 border-b border-white/8 pb-5">
         <EcsLogo />
         <div>
-          <div className="text-[2rem] font-semibold tracking-[-0.04em]">ECS</div>
-          <div className="text-sm text-emerald-100/70">
+          <div className="text-[2rem] font-semibold tracking-[-0.04em] text-white">ECS</div>
+          <div className="text-sm text-emerald-50/72">
             Environmental Card System
           </div>
         </div>
       </div>
 
-      <nav className="mt-6 space-y-2">
+      <nav className="mt-6 space-y-2.5">
         {navigation.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -58,11 +58,11 @@ export function SidebarNav() {
               className={cn(
                 "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:-translate-y-[1px]",
                 isActive
-                  ? "bg-emerald-500/22 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] ring-1 ring-emerald-300/25"
-                  : "text-emerald-50/78 hover:bg-white/6 hover:text-white",
+                  ? "bg-[linear-gradient(180deg,rgba(69,185,109,0.38)_0%,rgba(42,140,79,0.28)_100%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] ring-1 ring-emerald-300/22"
+                  : "text-emerald-50/82 hover:bg-white/7 hover:text-white",
               )}
             >
-              <Icon className="h-4.5 w-4.5" strokeWidth={1.8} />
+              <Icon className="h-4.5 w-4.5 shrink-0" strokeWidth={1.8} />
               <span>{item.label}</span>
             </Link>
           );
@@ -70,11 +70,11 @@ export function SidebarNav() {
       </nav>
 
       <div className="mt-auto space-y-4 pt-8">
-        <div className="rounded-[1.5rem] border border-white/10 bg-white/4 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-          <div className="text-xs uppercase tracking-[0.22em] text-emerald-100/55">
+        <div className="rounded-[1.5rem] border border-white/8 bg-white/5 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <div className="text-xs uppercase tracking-[0.22em] text-emerald-50/52">
             System Status
           </div>
-          <div className="mt-3 flex items-center justify-between text-sm">
+          <div className="mt-3 flex items-center justify-between text-sm text-emerald-50/92">
             <span className="inline-flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(74,222,128,0.55)]" />
               Stable
@@ -82,11 +82,11 @@ export function SidebarNav() {
             <Leaf className="h-4 w-4 text-emerald-300" strokeWidth={1.8} />
           </div>
         </div>
-        <div className="rounded-[1.5rem] border border-white/10 bg-white/4 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-          <div className="text-xs uppercase tracking-[0.22em] text-emerald-100/55">
+        <div className="rounded-[1.5rem] border border-white/8 bg-white/5 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <div className="text-xs uppercase tracking-[0.22em] text-emerald-50/52">
             Model Status
           </div>
-          <div className="mt-3 flex items-center justify-between text-sm">
+          <div className="mt-3 flex items-center justify-between text-sm text-emerald-50/92">
             <span className="inline-flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(74,222,128,0.55)]" />
               Online
@@ -94,13 +94,13 @@ export function SidebarNav() {
             <Sparkles className="h-4 w-4 text-emerald-300" strokeWidth={1.8} />
           </div>
         </div>
-        <div className="flex items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/4 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/7 text-sm font-semibold">
+        <div className="flex items-center gap-3 rounded-[1.5rem] border border-white/8 bg-white/5 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/10 text-sm font-semibold text-white">
             AA
           </div>
           <div>
-            <div className="text-sm font-medium">Amina Alharbi</div>
-            <div className="text-xs text-emerald-100/55">Lead Demonstrator</div>
+            <div className="text-sm font-medium text-white">Amina Alharbi</div>
+            <div className="text-xs text-emerald-50/52">Lead Demonstrator</div>
           </div>
         </div>
       </div>
