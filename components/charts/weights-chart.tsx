@@ -9,15 +9,17 @@ const colors = ["#42b96f", "#2f91d4", "#f39c39", "#7b60d1", "#3abf9d"];
 
 export function WeightsChart({ data }: { data: VariableMetric[] }) {
   return (
-    <div className="grid gap-5 xl:grid-cols-[1.22fr_0.78fr] xl:items-center">
-      <div className="mx-auto h-[250px] w-full max-w-[280px]">
-        <ChartShell height={250}>
+    <div className="grid gap-5 xl:grid-cols-[1.36fr_0.64fr] xl:items-center">
+      <div className="mx-auto h-[270px] w-full max-w-[320px]">
+        <ChartShell height={270}>
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
+            <PieChart margin={{ top: 8, right: 14, bottom: 8, left: 14 }}>
               <Pie
                 data={data}
                 dataKey="weight"
                 nameKey="name"
+                cx="50%"
+                cy="50%"
                 innerRadius={58}
                 outerRadius={86}
                 paddingAngle={4}

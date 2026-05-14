@@ -235,7 +235,7 @@ export function DashboardView() {
         </div>
       </Card>
 
-      <div className="grid gap-4 xl:grid-cols-[0.95fr_1.08fr_0.82fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.14fr_1fr_0.86fr]">
         <Card>
           <CardTitle>Variable Weights</CardTitle>
           <p className="mt-1 text-sm text-slate-500">
