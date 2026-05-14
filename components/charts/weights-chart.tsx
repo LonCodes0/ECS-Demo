@@ -9,8 +9,8 @@ const colors = ["#42b96f", "#2f91d4", "#f39c39", "#7b60d1", "#3abf9d"];
 
 export function WeightsChart({ data }: { data: VariableMetric[] }) {
   return (
-    <div className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr] xl:items-center">
-      <div className="mx-auto h-[250px] w-full max-w-[250px]">
+    <div className="grid gap-5 xl:grid-cols-[1.22fr_0.78fr] xl:items-center">
+      <div className="mx-auto h-[250px] w-full max-w-[280px]">
         <ChartShell height={250}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
