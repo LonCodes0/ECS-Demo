@@ -10,6 +10,7 @@ import {
   Gauge,
   LayoutGrid,
   Leaf,
+  Recycle,
   Settings,
   ShieldCheck,
   Sparkles,
@@ -28,6 +29,7 @@ const navigation = [
   { href: "/alerts", label: "Alerts", icon: AlertTriangle },
   { href: "/reports", label: "Reports", icon: FileText },
   { href: "/benchmarks", label: "Benchmarks", icon: ShieldCheck },
+  { href: "/solutions", label: "Sustainable Solutions", icon: Recycle },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

@@ -1,4 +1,10 @@
-import type { DashboardScenarioBundle, ScenarioOption } from "@/lib/ecs-types";
+import type {
+  DashboardScenarioBundle,
+  ScenarioOption,
+  SolutionCategory,
+  SolutionPartner,
+  SolutionRecommendationSummary,
+} from "@/lib/ecs-types";
 
 const scenarioOptions: ScenarioOption[] = [
   { id: "stable", label: "Stable", caption: "Healthy baseline" },
@@ -86,6 +92,140 @@ const analytics = {
     { label: "Week 6", water: 90, energy: 84, waste: 71, emissions: 69, vegetation: 38 },
   ],
 } as const;
+
+const solutionPartners: SolutionPartner[] = [
+  {
+    id: "green-cycle-sa",
+    name: "GreenCycle Arabia",
+    category: "waste",
+    status: "active",
+    description:
+      "Managed waste pickup, sorting, and diversion reporting tailored for large facilities and mixed commercial sites.",
+    tags: ["Recycling pickup", "Waste sorting", "Monthly diversion reports"],
+    savingPct: 18,
+    estimatedScoreUplift: 4.6,
+    timeToImpactDays: 18,
+    contactUrl: "https://example.com/greencycle-arabia",
+  },
+  {
+    id: "dawwar-systems",
+    name: "Dawwar Systems",
+    category: "waste",
+    status: "new",
+    description:
+      "IoT-based smart waste stations with contamination alerts and ECS-ready reporting for quick operational visibility.",
+    tags: ["IoT bins", "Contamination alerts", "ECS integration"],
+    savingPct: 24,
+    estimatedScoreUplift: 5.2,
+    timeToImpactDays: 28,
+    contactUrl: "https://example.com/dawwar-systems",
+  },
+  {
+    id: "acwa-efficiency",
+    name: "ACWA Efficiency Services",
+    category: "energy",
+    status: "partner",
+    description:
+      "Energy optimization assessments combining solar readiness, peak-load reduction, and smart monitoring for facilities.",
+    tags: ["Energy audit", "Solar readiness", "Peak shaving"],
+    savingPct: 31,
+    estimatedScoreUplift: 3.8,
+    timeToImpactDays: 26,
+    contactUrl: "https://example.com/acwa-efficiency",
+  },
+  {
+    id: "najm-solar-grid",
+    name: "Najm Solar Grid",
+    category: "energy",
+    status: "active",
+    description:
+      "On-site solar and smart metering packages designed to lower consumption volatility and improve energy resilience.",
+    tags: ["Solar systems", "Smart metering", "Energy dashboards"],
+    savingPct: 39,
+    estimatedScoreUplift: 4.4,
+    timeToImpactDays: 34,
+    contactUrl: "https://example.com/najm-solar-grid",
+  },
+  {
+    id: "maa-smart-flow",
+    name: "Maa Smart Flow",
+    category: "water",
+    status: "active",
+    description:
+      "Leak detection, pressure diagnostics, and smart alerts for buildings with high water variance or irrigation load.",
+    tags: ["Leak detection", "Pressure analytics", "Smart alerts"],
+    savingPct: 22,
+    estimatedScoreUplift: 4.1,
+    timeToImpactDays: 12,
+    contactUrl: "https://example.com/maa-smart-flow",
+  },
+  {
+    id: "riyadh-irrigation-labs",
+    name: "Riyadh Irrigation Labs",
+    category: "water",
+    status: "partner",
+    description:
+      "Adaptive irrigation scheduling and meter intelligence to reduce daytime overspend and stabilize water usage.",
+    tags: ["Smart irrigation", "Meter intelligence", "Usage scheduling"],
+    savingPct: 27,
+    estimatedScoreUplift: 3.7,
+    timeToImpactDays: 16,
+    contactUrl: "https://example.com/riyadh-irrigation-labs",
+  },
+];
+
+const solutionRecommendationMeta: Record<
+  SolutionCategory,
+  { headline: string; description: string }
+> = {
+  waste: {
+    headline: "Waste management is currently the strongest opportunity for score recovery.",
+    description:
+      "ECS is prioritizing recycling and sorting partners because waste is contributing the largest supported negative drag on the environmental score.",
+  },
+  energy: {
+    headline: "Energy optimization is the best next lever for stabilizing score behavior.",
+    description:
+      "ECS is prioritizing energy partners because consumption efficiency can quickly reduce operational pressure and support a healthier forecast.",
+  },
+  water: {
+    headline: "Water efficiency solutions are the most urgent category right now.",
+    description:
+      "ECS is prioritizing water partners because current demand variance is driving avoidable score loss and short-term operational risk.",
+  },
+};
+
+function getRecommendedSolutionCategory(
+  variables: DashboardScenarioBundle["variables"],
+): SolutionRecommendationSummary {
+  const supported = variables
+    .filter(
+      (variable) =>
+        variable.impact < 0 &&
+        (variable.id === "waste" || variable.id === "energy" || variable.id === "water"),
+    )
+    .sort((left, right) => left.impact - right.impact);
+
+  const selected = supported[0] ?? variables.find((variable) => variable.id === "waste") ?? variables[0];
+
+  const categoryMap: Record<string, SolutionCategory> = {
+    waste: "waste",
+    energy: "energy",
+    water: "water",
+  };
+
+  const category = categoryMap[selected.id] ?? "waste";
+  const meta = solutionRecommendationMeta[category];
+
+  return {
+    category,
+    variableId: selected.id,
+    variableName: selected.name,
+    impact: selected.impact,
+    headline: meta.headline,
+    description: meta.description,
+  };
+}
 
 const scoreHistory = {
   stable: [
@@ -283,6 +423,69 @@ const scenarioData: Record<DashboardScenarioBundle["scenario"], DashboardScenari
       { name: "Central Riyadh", score: 74.8, delta: "Current ECS demo focus" },
       { name: "Riyadh South", score: 69.5, delta: "Moderate pressure from waste load" },
     ],
+    solutions: solutionPartners.map((partner) => ({ ...partner, tags: [...partner.tags] })),
+    solutionRecommendation: getRecommendedSolutionCategory([
+      {
+        id: "water",
+        name: "Water Consumption",
+        displayValue: "320",
+        unit: "L/day",
+        statusLabel: "Moderate",
+        statusTone: "moderate",
+        impact: -3.2,
+        sparkline: [64, 63, 65, 62, 64, 63, 63, 64, 67, 65, 61, 62],
+        weight: 25,
+        description: "Managed demand with room for further optimization during peak hours.",
+      },
+      {
+        id: "energy",
+        name: "Energy Consumption",
+        displayValue: "45",
+        unit: "kWh/day",
+        statusLabel: "Good",
+        statusTone: "good",
+        impact: 1.5,
+        sparkline: [41, 40, 41, 39, 38, 40, 39, 38, 40, 41, 38, 39],
+        weight: 25,
+        description: "Load profile is favorable and supports forecast stability.",
+      },
+      {
+        id: "waste",
+        name: "Solid Waste",
+        displayValue: "12",
+        unit: "kg/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -4.0,
+        sparkline: [45, 46, 44, 45, 43, 44, 43, 44, 43, 42, 42, 41],
+        weight: 20,
+        description: "Waste remains the main drag on the otherwise healthy score profile.",
+      },
+      {
+        id: "emissions",
+        name: "Carbon Emissions",
+        displayValue: "28",
+        unit: "kg CO₂/day",
+        statusLabel: "Moderate",
+        statusTone: "moderate",
+        impact: -2.1,
+        sparkline: [54, 53, 52, 53, 51, 52, 50, 51, 49, 50, 48, 47],
+        weight: 20,
+        description: "Carbon performance is acceptable but still sensitive to demand spikes.",
+      },
+      {
+        id: "vegetation",
+        name: "Vegetation Cover",
+        displayValue: "0.62",
+        unit: "NDVI",
+        statusLabel: "Good",
+        statusTone: "good",
+        impact: 2.8,
+        sparkline: [52, 53, 52, 54, 55, 54, 55, 56, 57, 58, 57, 59],
+        weight: 10,
+        description: "Healthy vegetation improves resilience and supports score recovery.",
+      },
+    ]),
   },
   warning: {
     scenario: "warning",
@@ -464,6 +667,69 @@ const scenarioData: Record<DashboardScenarioBundle["scenario"], DashboardScenari
       { name: "Central Riyadh", score: 63.4, delta: "Current ECS demo focus" },
       { name: "Riyadh South", score: 61.2, delta: "Similar stress pattern emerging" },
     ],
+    solutions: solutionPartners.map((partner) => ({ ...partner, tags: [...partner.tags] })),
+    solutionRecommendation: getRecommendedSolutionCategory([
+      {
+        id: "water",
+        name: "Water Consumption",
+        displayValue: "352",
+        unit: "L/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -4.4,
+        sparkline: [69, 70, 72, 71, 74, 76, 75, 77, 78, 76, 77, 75],
+        weight: 25,
+        description: "Water demand is rising beyond comfortable operational balance.",
+      },
+      {
+        id: "energy",
+        name: "Energy Consumption",
+        displayValue: "54",
+        unit: "kWh/day",
+        statusLabel: "Moderate",
+        statusTone: "moderate",
+        impact: -1.2,
+        sparkline: [50, 51, 53, 54, 55, 57, 58, 57, 56, 55, 54, 54],
+        weight: 25,
+        description: "Energy use is edging upward and narrowing the recovery margin.",
+      },
+      {
+        id: "waste",
+        name: "Solid Waste",
+        displayValue: "16",
+        unit: "kg/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -4.9,
+        sparkline: [51, 53, 55, 54, 56, 57, 59, 58, 60, 61, 60, 59],
+        weight: 20,
+        description: "Waste escalation is the strongest short-term negative factor in this scenario.",
+      },
+      {
+        id: "emissions",
+        name: "Carbon Emissions",
+        displayValue: "33",
+        unit: "kg CO₂/day",
+        statusLabel: "Moderate",
+        statusTone: "moderate",
+        impact: -2.8,
+        sparkline: [55, 56, 57, 58, 57, 59, 60, 61, 60, 59, 58, 57],
+        weight: 20,
+        description: "Emissions follow the increased demand profile and pull down forecast confidence.",
+      },
+      {
+        id: "vegetation",
+        name: "Vegetation Cover",
+        displayValue: "0.55",
+        unit: "NDVI",
+        statusLabel: "Moderate",
+        statusTone: "moderate",
+        impact: 0.7,
+        sparkline: [52, 52, 51, 51, 50, 50, 49, 49, 48, 48, 47, 47],
+        weight: 10,
+        description: "Vegetation support is fading and no longer offsets other pressures strongly.",
+      },
+    ]),
   },
   critical: {
     scenario: "critical",
@@ -645,6 +911,69 @@ const scenarioData: Record<DashboardScenarioBundle["scenario"], DashboardScenari
       { name: "Central Riyadh", score: 46.9, delta: "Current ECS demo focus" },
       { name: "Riyadh South", score: 44.7, delta: "Comparable critical exposure" },
     ],
+    solutions: solutionPartners.map((partner) => ({ ...partner, tags: [...partner.tags] })),
+    solutionRecommendation: getRecommendedSolutionCategory([
+      {
+        id: "water",
+        name: "Water Consumption",
+        displayValue: "391",
+        unit: "L/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -5.8,
+        sparkline: [78, 80, 82, 84, 86, 87, 88, 90, 92, 91, 90, 89],
+        weight: 25,
+        description: "Severe water stress is one of the clearest drivers of decline.",
+      },
+      {
+        id: "energy",
+        name: "Energy Consumption",
+        displayValue: "62",
+        unit: "kWh/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -3.4,
+        sparkline: [58, 60, 62, 64, 66, 68, 70, 71, 70, 69, 68, 67],
+        weight: 25,
+        description: "Energy intensity compounds the score drop and increases uncertainty.",
+      },
+      {
+        id: "waste",
+        name: "Solid Waste",
+        displayValue: "21",
+        unit: "kg/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -6.2,
+        sparkline: [60, 63, 65, 68, 71, 73, 74, 75, 76, 74, 73, 72],
+        weight: 20,
+        description: "Waste is well beyond acceptable range and dominates the risk picture.",
+      },
+      {
+        id: "emissions",
+        name: "Carbon Emissions",
+        displayValue: "39",
+        unit: "kg CO₂/day",
+        statusLabel: "High",
+        statusTone: "high",
+        impact: -4.3,
+        sparkline: [62, 64, 66, 68, 70, 71, 72, 73, 74, 73, 72, 71],
+        weight: 20,
+        description: "Emissions are elevated and consistent with the heavy load across other variables.",
+      },
+      {
+        id: "vegetation",
+        name: "Vegetation Cover",
+        displayValue: "0.42",
+        unit: "NDVI",
+        statusLabel: "Moderate",
+        statusTone: "moderate",
+        impact: -1.1,
+        sparkline: [48, 47, 46, 45, 44, 43, 42, 42, 41, 40, 40, 39],
+        weight: 10,
+        description: "Vegetation support is weakening and no longer acts as a recovery buffer.",
+      },
+    ]),
   },
 };
 

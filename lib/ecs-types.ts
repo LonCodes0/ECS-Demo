@@ -3,6 +3,8 @@ export type ScenarioState = "stable" | "warning" | "critical";
 export type VariableKey = "water" | "energy" | "waste" | "emissions" | "vegetation";
 
 export type StatusTone = "good" | "moderate" | "high";
+export type SolutionCategory = "waste" | "energy" | "water";
+export type SolutionStatus = "active" | "partner" | "new";
 
 export interface EnvironmentalScoreSnapshot {
   score: number;
@@ -99,6 +101,28 @@ export interface CityComparison {
   delta: string;
 }
 
+export interface SolutionPartner {
+  id: string;
+  name: string;
+  category: SolutionCategory;
+  status: SolutionStatus;
+  description: string;
+  tags: string[];
+  savingPct: number;
+  estimatedScoreUplift: number;
+  timeToImpactDays: number;
+  contactUrl?: string;
+}
+
+export interface SolutionRecommendationSummary {
+  category: SolutionCategory;
+  variableId: VariableKey;
+  variableName: string;
+  impact: number;
+  headline: string;
+  description: string;
+}
+
 export interface DashboardScenarioBundle {
   scenario: ScenarioState;
   scenarioLabel: string;
@@ -122,6 +146,8 @@ export interface DashboardScenarioBundle {
   overviewStats: OverviewStat[];
   analytics: AnalyticsPoint[];
   cityComparisons: CityComparison[];
+  solutions: SolutionPartner[];
+  solutionRecommendation: SolutionRecommendationSummary;
 }
 
 export interface ScenarioOption {
